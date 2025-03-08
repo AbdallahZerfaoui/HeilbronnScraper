@@ -3,12 +3,13 @@ import asyncio
 import json
 import random
 import enum
+from datetime import datetime
 from fake_useragent import UserAgent
 from urllib.parse import quote, urlparse, urlunparse
 from urllib.parse import unquote
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from config import MONGO_URI
+from config import MONGO_URI, HTTP_BIN
 
 
 class ScrapingTools:
@@ -62,7 +63,7 @@ class ScrapingTools:
         :return: IP address as a string.
         """
         try:
-            response = await session.get("https://httpbin.org/ip")
+            response = await session.get(HTTP_BIN)
             ip_data = response.json()
             return ip_data.get("origin", "Unknown IP")
         except Exception as e:
@@ -112,4 +113,12 @@ class ScrapingTools:
     @staticmethod
     def extract_date(datetime_str):
         return datetime_str.split('T')[0]
+    
+    @staticmethod
+    def get_distance_date(date_str, today_str):
+        date = datetime.strptime(date_str, '%Y-%m-%d')
+        today = datetime.strptime(today_str, '%Y-%m-%d')
+        distance = date - today
+        return distance.days
+
     
