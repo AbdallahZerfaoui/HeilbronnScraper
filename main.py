@@ -13,7 +13,7 @@ async def main():
     json_filename = f"../io/heilbronn_{today}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
-
+    #fetch dates
     if (not os.path.isfile(json_filename)):
         url = scraper.tools.build_dates_url(today)
         data = await scraper.fetch(url)
@@ -27,18 +27,20 @@ async def main():
     # for date in dates:
     date = dates[0]
     print(date)
-    url = scraper.tools.build_appointments_url(date)
     json_filename = f"../io/heilbronn_{today}_{date}.json"
-    if (not os.path.isfile(json_filename)):
-        data = await scraper.fetch(url)
-        if data:
-            scraper.tools.save_results(data, json_filename)
-            appointments.append(data)
-    else:
-        with open(json_filename, "r", encoding="utf-8") as file:
-            data = json.load(file)
-    # sleep(randint(50, 300) / 100)
     distance = scraper.tools.get_distance_date(date, today)
+    # url = scraper.tools.build_appointments_url(date)
+    # if (not os.path.isfile(json_filename)):
+    #     data = await scraper.fetch(url)
+    #     if data:
+    #         scraper.tools.save_results(data, json_filename)
+    #         appointments.append(data)
+    # else:
+    #     with open(json_filename, "r", encoding="utf-8") as file:
+    #         data = json.load(file)
+    data = await scraper.fetch_appointments_for_date(date, json_filename)
+    appointments.append(data)
+    # sleep(randint(50, 300) / 100)
 
     #send the answer by email
     if (distance < MAX_DISTANCE):

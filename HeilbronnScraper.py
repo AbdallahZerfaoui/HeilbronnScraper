@@ -3,6 +3,7 @@ import asyncio
 import json
 import random
 import enum
+import os
 from fake_useragent import UserAgent
 from urllib.parse import quote, urlparse, urlunparse
 from urllib.parse import unquote
@@ -60,3 +61,16 @@ class HeilbronnScraper:
         except Exception as e:
             print(f"Request failed: {str(e)}")
             return None
+        
+
+    async def fetch_appointments_for_date(self, date, json_filename):
+        """Fetch appointments for a specific date and save the results."""
+        url = self.tools.build_appointments_url(date)
+        if not os.path.isfile(json_filename):
+            data = await self.fetch(url)
+            if data:
+                self.tools.save_results(data, json_filename)
+                return data
+        else:
+            with open(json_filename, "r", encoding="utf-8") as file:
+                return json.load(file)
