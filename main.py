@@ -27,7 +27,7 @@ async def main():
     # for date in dates:
     date = dates[0]
     print(date)
-    json_filename = f"../io/heilbronn_{today}_{date}.json"
+    json_filename = f"../io/heilbronn_{today}_{date}_{id}.json"
     distance = scraper.tools.get_distance_date(date, today)
     # url = scraper.tools.build_appointments_url(date)
     # if (not os.path.isfile(json_filename)):
@@ -60,8 +60,7 @@ async def main():
         
         for contact in contacts:
             sender.send_email(contact, subject=subject, body=body)
-    #cleaning
-    os.remove(json_filename)
+
     
 if __name__ == "__main__":
     asyncio.run(main())
