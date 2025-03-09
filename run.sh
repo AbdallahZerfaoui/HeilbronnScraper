@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH="/home/ubuntu/miniconda3/bin:/home/ubuntu/miniconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 
 # 1. Initialize Conda (only if not already initialized)
 if ! conda info > /dev/null 2>&1; then
@@ -11,11 +12,16 @@ fi
 
 # 2. Activate the Conda environment
 echo "Activating Conda environment..."
-source ~/miniconda3/etc/profile.d/conda.sh 
+
+cd $HOME/HeilbronnScraper
+source ~/miniconda3/etc/profile.d/conda.sh
+export PATH="/home/ubuntu/miniconda3/bin:/home/ubuntu/miniconda3/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
 conda activate scrap_venv
 
 # 3. Run the Python script
 echo "Running Python script..."
-python main.py
+python $HOME/HeilbronnScraper/main.py
 
 echo "Script finished."
+echo "==============================================================="
+echo "==============================================================="
