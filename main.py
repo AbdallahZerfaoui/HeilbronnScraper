@@ -10,7 +10,9 @@ from config import MAX_DISTANCE, CONTACTS_FILE, MESSAGE
 
 async def main():
     today = datetime.today().strftime('%Y-%m-%d')
-    json_filename = f"../io/heilbronn_{today}.json"
+    now = datetime.now()
+    id = int(now.strftime('%Y%m%d%H%M'))
+    json_filename = f"../io/heilbronn_{today}_{id}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
     #fetch dates
@@ -21,8 +23,6 @@ async def main():
             scraper.tools.save_results(data, json_filename)
 
     dates = scraper.tools.get_dates(json_filename)
-    now = datetime.now()
-    id = int(now.strftime('%Y%m%d%H%M'))
     appointments = []
     # for date in dates:
     date = dates[0]
@@ -60,6 +60,8 @@ async def main():
         
         for contact in contacts:
             sender.send_email(contact, subject=subject, body=body)
+    #cleaning
+    os.remove(json_filename)
     
 if __name__ == "__main__":
     asyncio.run(main())
