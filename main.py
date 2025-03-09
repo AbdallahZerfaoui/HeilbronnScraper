@@ -42,6 +42,8 @@ async def main():
     appointments.append(data)
     # sleep(randint(50, 300) / 100)
 
+    now = datetime.now()
+    id = int(now.strftime('%Y%m%d%H%M'))
     #send the answer by email
     if (distance < MAX_DISTANCE):
         tmp_dict = {today:appointments}
