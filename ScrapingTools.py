@@ -1,15 +1,16 @@
-from curl_cffi.requests import AsyncSession, BrowserType
-import asyncio
-import json
-import random
-import enum
-from datetime import datetime
-from fake_useragent import UserAgent
-from urllib.parse import quote, urlparse, urlunparse
-from urllib.parse import unquote
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from config import MONGO_URI, HTTP_BIN
+from imports import *
+# from curl_cffi.requests import AsyncSession, BrowserType
+# import asyncio
+# import json
+# import random
+# import enum
+# from datetime import datetime
+# from fake_useragent import UserAgent
+# from urllib.parse import quote, urlparse, urlunparse
+# from urllib.parse import unquote
+# from pymongo.mongo_client import MongoClient
+# from pymongo.server_api import ServerApi
+# from config import MONGO_URI, HTTP_BIN
 
 
 class ScrapingTools:

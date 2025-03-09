@@ -1,12 +1,13 @@
+from imports import *
 from HeilbronnScraper import HeilbronnScraper
 from EmailSender import EmailSender
-import asyncio
-import json
-import os
-from time import sleep
-from random import randint
-from datetime import datetime
-from config import MAX_DISTANCE, CONTACTS_FILE, MESSAGE, BASE_DIR, SUBJECT
+# import asyncio
+# import json
+# import os
+# from time import sleep
+# from random import randint
+# from datetime import datetime
+# from config import MAX_DISTANCE, CONTACTS_FILE, MESSAGE, BASE_DIR, SUBJECT
 
 async def main():
     today = datetime.today().strftime('%Y-%m-%d')
@@ -17,48 +18,38 @@ async def main():
     json_filename = f"{BASE_DIR}/heilbronn_{today}_{id}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
-    
-    # #fetch dates
-    # dates = await scraper.fetch_dates(today, json_filename)
-    
-    # #check the distance
-    # date = dates[0]
-    # print(date)
-    # distance = scraper.tools.get_distance_date(date, today)
-    # if (distance > MAX_DISTANCE):
-    #     print(f"The earliest date is {date} which is more than {MAX_DISTANCE} days away")
-    #     return
-    
+
     # Fetch valid appointments and related info
-    appointments_data, distance, earliest_date = await scraper.get_valid_appointments(today, json_filename)
+    appointments_data, distance, earliest_date = \
+        await scraper.get_valid_appointments(today, json_filename, id)
     
     if appointments_data is None:
         return
     
     #fetch appointments
-    appointments = []
-    json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
+    # appointments = []
+    # json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
     # data = await scraper.fetch_appointments_for_date(earliest_date, json_filename)
-    appointments.append(appointments_data)
+    # appointments.append(appointments_data)
 
     #send the answer by email
-    if (distance < MAX_DISTANCE):
-        tmp_dict = {today:appointments}
-        if (appointments):
-            scraper.tools.save_dict_in_mongo(id, tmp_dict)
-        appointment_time = appointments_data["start"]
+    # if (distance < MAX_DISTANCE):
+    tmp_dict = {today:appointments_data}
+    if (appointments_data):
+        scraper.tools.save_dict_in_mongo(id, tmp_dict)
+    appointment_time = appointments_data[0]["start"]
 
-        with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
-            contacts = file.read().splitlines()
-        
-        subject = SUBJECT
-        with open(MESSAGE, "r", encoding="utf-8") as file:
-            print(appointment_time)
-            body = file.read()
-            body = body.replace("[appointment_time]", appointment_time)
-        
-        for contact in contacts:
-            sender.send_email(contact, subject=subject, body=body)
+    with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
+        contacts = file.read().splitlines()
+
+    subject = SUBJECT
+    with open(MESSAGE, "r", encoding="utf-8") as file:
+        print(appointment_time)
+        body = file.read()
+        body = body.replace("[appointment_time]", appointment_time)
+
+    for contact in contacts:
+        sender.send_email(contact, subject=subject, body=body)
 
     
 if __name__ == "__main__":

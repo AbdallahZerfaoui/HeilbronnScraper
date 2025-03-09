@@ -1,16 +1,16 @@
-from curl_cffi.requests import AsyncSession, BrowserType
-import asyncio
-import json
-import random
-import enum
-import os
-from fake_useragent import UserAgent
-from urllib.parse import quote, urlparse, urlunparse
-from urllib.parse import unquote
+from imports import *
 from ScrapingTools import ScrapingTools
 from Browser import BrowserType
-from config import PROXY_URL, TIMEOUT, BASE_DIR, MAX_DISTANCE
-
+# from curl_cffi.requests import AsyncSession, BrowserType
+# import asyncio
+# import json
+# import random
+# import enum
+# import os
+# from fake_useragent import UserAgent
+# from urllib.parse import quote, urlparse, urlunparse
+# from urllib.parse import unquote
+# from config import PROXY_URL, TIMEOUT, BASE_DIR, MAX_DISTANCE
 
 class HeilbronnScraper:
     def __init__(self):
@@ -73,7 +73,6 @@ class HeilbronnScraper:
         dates = self.tools.get_dates(json_filename)
         return dates
 
-                     
     async def fetch_appointments_for_date(self, date, json_filename):
         """Fetch appointments for a specific date and save the results."""
         url = self.tools.build_appointments_url(date)
@@ -86,10 +85,10 @@ class HeilbronnScraper:
             with open(json_filename, "r", encoding="utf-8") as file:
                 return json.load(file)
             
-    async def get_valid_appointments(self, today, id):
+    async def get_valid_appointments(self, today, json_filename, id):
         """Orchestrate date and appointment fetching.
         Returns (appointments_data, distance, earliest_date)."""
-        dates = await self.fetch_dates(today, id)
+        dates = await self.fetch_dates(today, json_filename)
         if not dates:
             return None, None, None
         earliest_date = dates[0]
@@ -97,5 +96,6 @@ class HeilbronnScraper:
         if distance > MAX_DISTANCE:
             print(f"Earliest date {earliest_date} is over {MAX_DISTANCE} days away.")
             return None, None, None
-        appointments_data = await self.fetch_appointments_for_date(earliest_date, today, id)
+        json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
+        appointments_data = await self.fetch_appointments_for_date(earliest_date, json_filename)
         return appointments_data, distance, earliest_date
