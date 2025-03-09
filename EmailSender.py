@@ -2,7 +2,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
-from config import SENDER, PASSWORD
+from config import SENDER, PASSWORD, STMP_SERVER, STMP_PORT
 
 class EmailSender:
     def __init__(self, sender_email = SENDER, sender_password = PASSWORD):
@@ -14,8 +14,8 @@ class EmailSender:
         """
         self.sender_email = sender_email
         self.sender_password = sender_password
-        self.smtp_server = "smtp.gmail.com"
-        self.smtp_port = 587  # Port for TLS
+        self.smtp_server = STMP_SERVER
+        self.smtp_port = STMP_PORT  # Port for TLS
 
     def send_email(self, recipient_email, subject, body, is_html=False):
         """

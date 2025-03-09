@@ -9,11 +9,12 @@ from urllib.parse import quote, urlparse, urlunparse
 from urllib.parse import unquote
 from ScrapingTools import ScrapingTools
 from Browser import BrowserType
-from config import PROXY_URL
+from config import PROXY_URL, TIMEOUT, BASE_DIR, MAX_DISTANCE
 
 
 class HeilbronnScraper:
     def __init__(self):
+        self.base_dir = BASE_DIR
         self.tools = ScrapingTools()
         self.proxies = {
             "http": PROXY_URL,
@@ -37,7 +38,7 @@ class HeilbronnScraper:
             impersonate=self.choose_impersonate(),
             headers=self.tools.get_random_headers(),
             proxies=self.proxies,
-            timeout=30
+            timeout=TIMEOUT,
         )
         check_ip = await self.tools.check_ip(self.session)
         print(f"Server sees fixed IP: {check_ip}")
@@ -84,3 +85,17 @@ class HeilbronnScraper:
         else:
             with open(json_filename, "r", encoding="utf-8") as file:
                 return json.load(file)
+            
+    async def get_valid_appointments(self, today, id):
+        """Orchestrate date and appointment fetching.
+        Returns (appointments_data, distance, earliest_date)."""
+        dates = await self.fetch_dates(today, id)
+        if not dates:
+            return None, None, None
+        earliest_date = dates[0]
+        distance = self.tools.get_distance_date(earliest_date, today)
+        if distance > MAX_DISTANCE:
+            print(f"Earliest date {earliest_date} is over {MAX_DISTANCE} days away.")
+            return None, None, None
+        appointments_data = await self.fetch_appointments_for_date(earliest_date, today, id)
+        return appointments_data, distance, earliest_date

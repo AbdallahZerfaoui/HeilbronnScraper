@@ -18,29 +18,35 @@ async def main():
     scraper = HeilbronnScraper()
     sender = EmailSender()
     
-    #fetch dates
-    dates = await scraper.fetch_dates(today, json_filename)
+    # #fetch dates
+    # dates = await scraper.fetch_dates(today, json_filename)
     
-    #check the distance
-    date = dates[0]
-    print(date)
-    distance = scraper.tools.get_distance_date(date, today)
-    if (distance > MAX_DISTANCE):
-        print(f"The earliest date is {date} which is more than {MAX_DISTANCE} days away")
+    # #check the distance
+    # date = dates[0]
+    # print(date)
+    # distance = scraper.tools.get_distance_date(date, today)
+    # if (distance > MAX_DISTANCE):
+    #     print(f"The earliest date is {date} which is more than {MAX_DISTANCE} days away")
+    #     return
+    
+    # Fetch valid appointments and related info
+    appointments_data, distance, earliest_date = await scraper.get_valid_appointments(today, json_filename)
+    
+    if appointments_data is None:
         return
     
     #fetch appointments
     appointments = []
-    json_filename = f"{BASE_DIR}/heilbronn_{today}_{date}_{id}.json"
-    data = await scraper.fetch_appointments_for_date(date, json_filename)
-    appointments.append(data)
+    json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
+    # data = await scraper.fetch_appointments_for_date(earliest_date, json_filename)
+    appointments.append(appointments_data)
 
     #send the answer by email
     if (distance < MAX_DISTANCE):
         tmp_dict = {today:appointments}
         if (appointments):
             scraper.tools.save_dict_in_mongo(id, tmp_dict)
-        appointment_time = data[0]["start"]
+        appointment_time = appointments_data["start"]
 
         with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
             contacts = file.read().splitlines()
