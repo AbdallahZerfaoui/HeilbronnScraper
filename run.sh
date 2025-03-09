@@ -11,6 +11,7 @@ fi
 
 # 2. Activate the Conda environment
 echo "Activating Conda environment..."
+source ~/miniconda3/etc/profile.d/conda.sh 
 conda activate scrap_venv
 
 # 3. Run the Python script
