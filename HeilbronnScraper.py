@@ -62,7 +62,17 @@ class HeilbronnScraper:
             print(f"Request failed: {str(e)}")
             return None
         
+    async def fetch_dates(self, today, json_filename):
+        """Fetch dates and save the results."""
+        url = self.tools.build_dates_url(today)
+        if not os.path.isfile(json_filename):
+            data = await self.fetch(url)
+            if data:
+                self.tools.save_results(data, json_filename)
+        dates = self.tools.get_dates(json_filename)
+        return dates
 
+                     
     async def fetch_appointments_for_date(self, date, json_filename):
         """Fetch appointments for a specific date and save the results."""
         url = self.tools.build_appointments_url(date)

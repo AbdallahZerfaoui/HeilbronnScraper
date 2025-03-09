@@ -17,30 +17,24 @@ async def main():
     json_filename = f"{BASE_DIR}/heilbronn_{today}_{id}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
+    
     #fetch dates
-    if (not os.path.isfile(json_filename)):
-        url = scraper.tools.build_dates_url(today)
-        data = await scraper.fetch(url)
-        if data:
-            scraper.tools.save_results(data, json_filename)
-
-    dates = scraper.tools.get_dates(json_filename)
-    # for date in dates:
+    dates = await scraper.fetch_dates(today, json_filename)
+    
+    #check the distance
     date = dates[0]
     print(date)
     distance = scraper.tools.get_distance_date(date, today)
     if (distance > MAX_DISTANCE):
         print(f"The earliest date is {date} which is more than {MAX_DISTANCE} days away")
         return
+    
     #fetch appointments
     appointments = []
     json_filename = f"{BASE_DIR}/heilbronn_{today}_{date}_{id}.json"
     data = await scraper.fetch_appointments_for_date(date, json_filename)
     appointments.append(data)
-    # sleep(randint(50, 300) / 100)
 
-    # now = datetime.now()
-    # id = int(now.strftime('%Y%m%d%H%M'))
     #send the answer by email
     if (distance < MAX_DISTANCE):
         tmp_dict = {today:appointments}
