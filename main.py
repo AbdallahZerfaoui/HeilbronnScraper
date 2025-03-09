@@ -6,13 +6,15 @@ import os
 from time import sleep
 from random import randint
 from datetime import datetime
-from config import MAX_DISTANCE, CONTACTS_FILE, MESSAGE
+from config import MAX_DISTANCE, CONTACTS_FILE, MESSAGE, BASE_DIR, SUBJECT
 
 async def main():
     today = datetime.today().strftime('%Y-%m-%d')
     now = datetime.now()
     id = int(now.strftime('%Y%m%d%H%M'))
-    json_filename = f"../io/heilbronn_{today}_{id}.json"
+    if not os.path.exists(BASE_DIR):
+        os.makedirs(BASE_DIR)
+    json_filename = f"{BASE_DIR}/heilbronn_{today}_{id}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
     #fetch dates
@@ -23,27 +25,22 @@ async def main():
             scraper.tools.save_results(data, json_filename)
 
     dates = scraper.tools.get_dates(json_filename)
-    appointments = []
     # for date in dates:
     date = dates[0]
     print(date)
-    json_filename = f"../io/heilbronn_{today}_{date}_{id}.json"
     distance = scraper.tools.get_distance_date(date, today)
-    # url = scraper.tools.build_appointments_url(date)
-    # if (not os.path.isfile(json_filename)):
-    #     data = await scraper.fetch(url)
-    #     if data:
-    #         scraper.tools.save_results(data, json_filename)
-    #         appointments.append(data)
-    # else:
-    #     with open(json_filename, "r", encoding="utf-8") as file:
-    #         data = json.load(file)
+    if (distance > MAX_DISTANCE):
+        print(f"The earliest date is {date} which is more than {MAX_DISTANCE} days away")
+        return
+    #fetch appointments
+    appointments = []
+    json_filename = f"{BASE_DIR}/heilbronn_{today}_{date}_{id}.json"
     data = await scraper.fetch_appointments_for_date(date, json_filename)
     appointments.append(data)
     # sleep(randint(50, 300) / 100)
 
-    now = datetime.now()
-    id = int(now.strftime('%Y%m%d%H%M'))
+    # now = datetime.now()
+    # id = int(now.strftime('%Y%m%d%H%M'))
     #send the answer by email
     if (distance < MAX_DISTANCE):
         tmp_dict = {today:appointments}
@@ -54,7 +51,7 @@ async def main():
         with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
             contacts = file.read().splitlines()
         
-        subject = "Your appointment"
+        subject = SUBJECT
         with open(MESSAGE, "r", encoding="utf-8") as file:
             print(appointment_time)
             body = file.read()

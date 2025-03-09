@@ -10,5 +10,7 @@ PASSWORD = os.getenv("PASSWORD", "wqoqcacupvplpzxg")
 
 CONTACTS_FILE = os.getenv("CONTACTS_FILE", "contacts.txt")
 MESSAGE = os.getenv("MESSAGE", "message.txt")
+SUBJECT = os.getenv("SUBJECT", "Your appointment")
 
-MAX_DISTANCE = 260
+MAX_DISTANCE = 160
+BASE_DIR = os.path.abspath("io")
