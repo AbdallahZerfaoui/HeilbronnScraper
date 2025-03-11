@@ -18,39 +18,41 @@ async def main():
     json_filename = f"{BASE_DIR}/heilbronn_{today}_{id}.json"
     scraper = HeilbronnScraper()
     sender = EmailSender()
+    try:
+        # Fetch valid appointments and related info
+        appointments_data, distance, earliest_date = \
+            await scraper.get_valid_appointments(today, json_filename, id)
+        
+        if appointments_data is None:
+            return
+        
+        #fetch appointments
+        # appointments = []
+        # json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
+        # data = await scraper.fetch_appointments_for_date(earliest_date, json_filename)
+        # appointments.append(appointments_data)
 
-    # Fetch valid appointments and related info
-    appointments_data, distance, earliest_date = \
-        await scraper.get_valid_appointments(today, json_filename, id)
-    
-    if appointments_data is None:
-        return
-    
-    #fetch appointments
-    # appointments = []
-    # json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
-    # data = await scraper.fetch_appointments_for_date(earliest_date, json_filename)
-    # appointments.append(appointments_data)
+        #send the answer by email
+        # if (distance < MAX_DISTANCE):
+        tmp_dict = {today:appointments_data}
+        if (appointments_data):
+            scraper.tools.save_dict_in_mongo(id, tmp_dict)
+        # appointment_time = appointments_data[0]["start"]
 
-    #send the answer by email
-    # if (distance < MAX_DISTANCE):
-    tmp_dict = {today:appointments_data}
-    if (appointments_data):
-        scraper.tools.save_dict_in_mongo(id, tmp_dict)
-    appointment_time = appointments_data[0]["start"]
+        with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
+            contacts = file.read().splitlines()
 
-    with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
-        contacts = file.read().splitlines()
+        # subject = SUBJECT
+        # with open(MESSAGE, "r", encoding="utf-8") as file:
+        #     print(appointment_time)
+        #     body = file.read()
+        #     body = body.replace("[appointment_time]", appointment_time)
+        subject, body = sender.email_builder(today, appointments_data, id)
 
-    subject = SUBJECT
-    with open(MESSAGE, "r", encoding="utf-8") as file:
-        print(appointment_time)
-        body = file.read()
-        body = body.replace("[appointment_time]", appointment_time)
+        for contact in contacts:
+            sender.send_email(contact, subject=subject, body=body)
+    except Exception as e:
+        sender.report_error(e)
 
-    for contact in contacts:
-        sender.send_email(contact, subject=subject, body=body)
-
-    
 if __name__ == "__main__":
     asyncio.run(main())

@@ -10,6 +10,8 @@ STMP_PORT = os.getenv("STMP_PORT", 587)
 SENDER = os.getenv("SENDER", "adamberlin112020@gmail.com")
 PASSWORD = os.getenv("PASSWORD", "wqoqcacupvplpzxg")
 
+ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "zerfaouiabdallah@gmail.com")
+
 CONTACTS_FILE = os.getenv("CONTACTS_FILE", "contacts.txt")
 MESSAGE = os.getenv("MESSAGE", "message.txt")
 SUBJECT = os.getenv("SUBJECT", "Your appointment")

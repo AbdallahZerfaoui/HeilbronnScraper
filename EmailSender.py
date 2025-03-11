@@ -17,6 +17,16 @@ class EmailSender:
         self.sender_password = sender_password
         self.smtp_server = STMP_SERVER
         self.smtp_port = STMP_PORT  # Port for TLS
+    
+    def email_builder(self, today, appointments_data, id):
+        appointment_time = appointments_data[0]["start"]
+
+        subject = SUBJECT
+        with open(MESSAGE, "r", encoding="utf-8") as file:
+            print(appointment_time)
+            body = file.read()
+            body = body.replace("[appointment_time]", appointment_time)
+        return subject, body
 
     def send_email(self, recipient_email, subject, body, is_html=False):
         """
@@ -54,3 +64,15 @@ class EmailSender:
         except Exception as e:
             print(f"Failed to send email: {e}")
             return False
+        
+    def report_error(self, error_message):
+        """
+        Send an email to the developer with an error message.
+
+        :param error_message: The error message to send.
+        :return: True if the email was sent successfully, False otherwise.
+        """
+        # recipient_email = self.sender_email
+        subject = "Error Report"
+        body = f"An error occurred:\n\n{error_message}"
+        return self.send_email(ADMIN_EMAIL, subject, body)
