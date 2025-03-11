@@ -1,9 +1,4 @@
 from imports import *
-# import smtplib
-# from email.mime.text import MIMEText
-# from email.mime.multipart import MIMEMultipart
-# import os
-# from config import SENDER, PASSWORD, STMP_SERVER, STMP_PORT
 
 class EmailSender:
     def __init__(self, sender_email = SENDER, sender_password = PASSWORD):

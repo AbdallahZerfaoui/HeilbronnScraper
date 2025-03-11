@@ -1,0 +1,4 @@
+docker build -t heilbronn_scraper .
+docker run -it --name heilbronn_scraper heilbronn_scraper
+docker run -it -v "$(pwd)":/app --name heilbronn_scraper heilbronn_scraper
+docker exec -it heilbronn_scraper /bin/bash

@@ -1,16 +1,6 @@
 from imports import *
 from ScrapingTools import ScrapingTools
 from Browser import BrowserType
-# from curl_cffi.requests import AsyncSession, BrowserType
-# import asyncio
-# import json
-# import random
-# import enum
-# import os
-# from fake_useragent import UserAgent
-# from urllib.parse import quote, urlparse, urlunparse
-# from urllib.parse import unquote
-# from config import PROXY_URL, TIMEOUT, BASE_DIR, MAX_DISTANCE
 
 class HeilbronnScraper:
     def __init__(self):
@@ -98,4 +88,4 @@ class HeilbronnScraper:
             return None, None, None
         json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
         appointments_data = await self.fetch_appointments_for_date(earliest_date, json_filename)
-        return appointments_data, distance, earliest_date
+        return appointments_data

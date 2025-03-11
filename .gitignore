@@ -1,3 +1,7 @@
+# Folder
 __pycache__/
 io/
+
+# Files
+faker.py
 contacts.txt
