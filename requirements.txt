@@ -57,3 +57,13 @@ ushlex==0.99.1
 webcolors==24.11.1
 wheel==0.45.1
 yarl==1.18.3
+greenlet==3.1.1 
+iniconfig==2.0.0
+playwright==1.50.0
+pluggy==1.5.0 
+pyee==12.1.1
+pytest==8.3.5
+pytest-base-url==2.1.0
+pytest-playwright==0.7.0
+python-slugify==8.0.4
+text-unidecode==1.3

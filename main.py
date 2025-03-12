@@ -1,6 +1,7 @@
 from imports import *
 from HeilbronnScraper import HeilbronnScraper
 from EmailSender import EmailSender
+from AppointmentBooker import AppointmentBooker
 
 async def main():
     today = datetime.today().strftime('%Y-%m-%d')
@@ -9,8 +10,10 @@ async def main():
     if not os.path.exists(BASE_DIR):
         os.makedirs(BASE_DIR)
     json_filename = f"{BASE_DIR}/heilbronn_{today}_{id}.json"
+    
     scraper = HeilbronnScraper()
     sender = EmailSender()
+    booker = AppointmentBooker(headless=False)
     try:
         # Fetch valid appointments and related info
         appointments_data = \

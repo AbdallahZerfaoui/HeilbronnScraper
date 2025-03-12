@@ -5,3 +5,4 @@ io/
 # Files
 faker.py
 contacts.txt
+test*

@@ -17,3 +17,5 @@ from time import sleep
 from config import *
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from playwright.sync_api import sync_playwright
+import pandas as pd

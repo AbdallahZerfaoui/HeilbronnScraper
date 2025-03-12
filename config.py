@@ -3,6 +3,15 @@ import os
 PROXY_URL = os.getenv("PROXY_URL", "http://ikhyxlmu-rotate:mcfoaj670x36@p.webshare.io:80/")
 MONGO_URI = os.getenv("MONGO_URI", "mongodb+srv://adamberlin112020:f6nEppPx0fOlHImd@cluster0.zbx2q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 
+BOOKER_URL = os.getenv("BOOKER_URL", "https://www.qtermin.de/qtermin-stadtheilbronn-abh?lang=de")
+PROFILES = os.getenv("PROFILES", "profiles.csv")
+
+# SELECTORS
+RESIDENT_PERMIT_FAMILY = os.getenv("RESIDENT_PERMIT_FAMILY", "h1#sg63091txt")
+COUNTER_PLUS = os.getenv("COUNTER_PLUS", "span.counterPlus")
+CONTINUE_BUTTON = os.getenv("CONTINUE_BUTTON", "button#bp1")
+SLOT1 = os.getenv("SLOT1", "li#slot1")
+
 HTTP_BIN = os.getenv("HTTP_BIN", "https://httpbin.org/ip")
 STMP_SERVER = os.getenv("STMP_SERVER", "smtp.gmail.com")
 STMP_PORT = os.getenv("STMP_PORT", 587)
