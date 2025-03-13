@@ -22,6 +22,12 @@ class EmailSender:
             body = file.read()
             body = body.replace("[appointment_time]", appointment_time)
         return subject, body
+    
+    def load_interested_contacts(self, distance):
+        df = pd.read_csv(CONTACTS_FILE)
+        df = df[df['max_distance'] >= distance]
+        contacts = df['email'].tolist()
+        return contacts
 
     def send_email(self, recipient_email, subject, body, is_html=False):
         """

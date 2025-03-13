@@ -9,8 +9,11 @@ COPY requirements.txt .
 
 # Install the Python dependencies using conda or pip
 RUN conda install --yes --file requirements.txt || pip install -r requirements.txt
+RUN pip install pytest-playwright && playwright install
 RUN apt-get update && apt-get upgrade -y && apt-get install nano
-# Copy the rest of the project files into the container
+
+# Set up colors for the prompt
+RUN echo "PS1='\\[\\033[1;32m\\]\\u@\\h\\[\\033[0;36m\\]:\\[\\033[1;34m\\]\\w\\[\\033[0m\\]# '" >> ~/.bashrc
 # COPY . .
 # Set the default command to bash
 CMD ["bash"]

@@ -13,10 +13,10 @@ async def main():
     
     scraper = HeilbronnScraper()
     sender = EmailSender()
-    booker = AppointmentBooker(headless=False)
+    # booker = await AppointmentBooker(headless=False)
     try:
         # Fetch valid appointments and related info
-        appointments_data = \
+        appointments_data, distance = \
             await scraper.get_valid_appointments(today, json_filename, id)
         
         if appointments_data is None:
@@ -28,8 +28,7 @@ async def main():
             scraper.tools.save_dict_in_mongo(id, tmp_dict)
             
 		# Read contacts from file
-        with open(CONTACTS_FILE, "r", encoding="utf-8") as file:
-            contacts = file.read().splitlines()
+        contacts = sender.load_interested_contacts(distance)
 
 		# Send email to each contact
         subject, body = sender.email_builder(today, appointments_data, id)
@@ -38,6 +37,8 @@ async def main():
             sender.send_email(contact, subject=subject, body=body)
     except Exception as e:
         sender.report_error(e)
+    # finally:
+    #     await booker.close()
 
 if __name__ == "__main__":
     asyncio.run(main())

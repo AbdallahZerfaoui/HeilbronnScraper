@@ -80,12 +80,19 @@ class HeilbronnScraper:
         Returns (appointments_data, distance, earliest_date)."""
         dates = await self.fetch_dates(today, json_filename)
         if not dates:
-            return None, None, None
+            return None, None
         earliest_date = dates[0]
         distance = self.tools.get_distance_date(earliest_date, today)
         if distance > MAX_DISTANCE:
             print(f"Earliest date {earliest_date} is over {MAX_DISTANCE} days away.")
-            return None, None, None
+            return None, None
         json_filename = f"{BASE_DIR}/heilbronn_{today}_{earliest_date}_{id}.json"
         appointments_data = await self.fetch_appointments_for_date(earliest_date, json_filename)
-        return appointments_data
+        return appointments_data, distance
+    
+    def check_distance(self, distance, max_distance):
+        """Check if the distance is within the limit."""
+        if distance > max_distance:
+            print(f"Earliest date is over {max_distance} days away.")
+            return False
+        return True

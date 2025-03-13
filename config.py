@@ -21,10 +21,10 @@ PASSWORD = os.getenv("PASSWORD", "wqoqcacupvplpzxg")
 
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "zerfaouiabdallah@gmail.com")
 
-CONTACTS_FILE = os.getenv("CONTACTS_FILE", "contacts.txt")
+CONTACTS_FILE = os.getenv("CONTACTS_FILE", "contacts.csv")
 MESSAGE = os.getenv("MESSAGE", "message.txt")
 SUBJECT = os.getenv("SUBJECT", "Your appointment")
 
-MAX_DISTANCE = 160
+MAX_DISTANCE = 170
 TIMEOUT = 30
 BASE_DIR = os.path.abspath("io")
