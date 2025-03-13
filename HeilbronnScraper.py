@@ -31,7 +31,10 @@ class HeilbronnScraper:
             timeout=TIMEOUT,
         )
         check_ip = await self.tools.check_ip(self.session)
-        print(f"Server sees fixed IP: {check_ip}")
+        if check_ip:
+            print(f"Server sees fixed IP: {check_ip}")
+        else:
+            print(f"MINOR ERROR : Failed to check IP")
         
 
     async def fetch(self, url):
