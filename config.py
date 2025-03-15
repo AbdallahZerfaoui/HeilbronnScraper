@@ -22,8 +22,11 @@ PASSWORD = os.getenv("PASSWORD", "wqoqcacupvplpzxg")
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "zerfaouiabdallah@gmail.com")
 
 CONTACTS_FILE = os.getenv("CONTACTS_FILE", "contacts.csv")
-MESSAGE = os.getenv("MESSAGE", "message.txt")
+MESSAGE = os.getenv("MESSAGE", "message.html")
 SUBJECT = os.getenv("SUBJECT", "Your appointment")
+LOCATION_LINK = os.getenv("LOCATION_LINK", "https://maps.google.com/maps?hl=de&gl=de&um=1&ie=UTF-8&fb=1&sa=X&ftid=0x47982f412dab0e6f:0x30aa9965f34723b")
+OFFICE_ADDRESS = os.getenv("OFFICE_ADDRESS", "Marktpl. 7, 74072 Heilbronn")
+OFFICE_NAME = os.getenv("OFFICE_NAME", "Stadt Heilbronn")
 
 MAX_DISTANCE = 170
 TIMEOUT = 30

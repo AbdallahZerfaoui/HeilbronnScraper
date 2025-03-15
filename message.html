@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Termin Available!</title>
+    <style>
+        /* Reset styles */
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 0 auto; background: #f8f9ff; }
+        
+        /* Header */
+        .header { 
+            background: #2563eb; 
+            padding: 2rem; 
+            text-align: center; 
+            color: white;
+        }
+        
+        /* Timer */
+        #countdown {
+            background: #1e40af;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        /* Content */
+        .content { 
+            padding: 2rem; 
+            background: white;
+            border-radius: 8px;
+            margin: 1rem;
+        }
+        
+        /* Buttons */
+        .button {
+            display: block;
+            width: 92%;
+            padding: 1rem;
+            text-align: center;
+            background: #2563eb;
+            color: white !important;
+            text-decoration: none;
+            border-radius: 6px;
+            margin: 1rem auto;
+        }
+        
+        .secondary-link {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+		.coffee-button {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-top: 20px;
+            background: #f8f9ff;
+            color: #2563eb !important;
+            border: 2px solid #2563eb;
+            border-radius: 24px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+		.coffee-button:hover {
+			background: #2563eb;
+			color: white !important;
+		}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 Termin Found!</h1>
+            <p>Act Fast - Limited Availability</p>
+        </div>
+
+        <div id="countdown">
+            ⏳ Time remaining: 
+            <span id="hours">00</span>h 
+            <span id="minutes">00</span>m 
+            <span id="seconds">00</span>s
+        </div>
+
+        <div class="content">
+            <p>Hi [First Name],</p>
+            <p>We've secured an appointment at <strong>[Office_Name]</strong>:</p>
+            
+            <div style="margin: 1.5rem 0;">
+                📅 <strong>Date:</strong> [appointment_date]<br>
+                🕒 <strong>Time:</strong> [appointment_time]<br>
+                📍 <strong>Address:</strong> <a href="[Location_Link]">[Office_Address]</a>
+            </div>
+
+            <a href="[Booking_Link]" class="button">BOOK NOW →</a>
+
+            <p style="text-align: center; margin-top: 2rem;">
+                <a href="[Settings_Link]" class="secondary-link">Can't make it? Adjust preferences</a><br>
+                <a href="mailto:support@terminjetzt.de" class="secondary-link">Need help? Reply within 15min</a>
+            </p>
+        </div>
+
+		<div style="text-align: center; margin: 20px 0;">
+			<a href="https://buymeacoffee.com/yourprofile" class="coffee-button">
+				☕ Support Our Service
+			</a>
+		</div>
+
+        <div style="padding: 2rem; text-align: center; color: #666; font-size: 0.9rem;">
+            <p>This is an automated message from TerminJetzt.de<br>
+            Musterstraße 123, 10115 Berlin<br>
+            <a href="[Unsubscribe_Link]">Unsubscribe</a> | <a href="[Privacy_Link]">Privacy Policy</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Set expiration time (15 minutes from now)
+        const countDownDate = new Date().getTime() + 15 * 60 * 1000;
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = "⚠️ This slot is no longer available";
+                return;
+            }
+
+            const hours = Math.floor(distance / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('hours').innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerHTML = seconds.toString().padStart(2, '0');
+        }
+
+        // Update every second
+        setInterval(updateTimer, 1000);
+        updateTimer(); // Initial call
+    </script>
+</body>
+</html>

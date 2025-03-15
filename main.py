@@ -1,7 +1,7 @@
 from imports import *
 from HeilbronnScraper import HeilbronnScraper
 from EmailSender import EmailSender
-from AppointmentBooker import AppointmentBooker
+# from AppointmentBooker import AppointmentBooker
 
 async def main():
     today = datetime.today().strftime('%Y-%m-%d')
@@ -28,12 +28,12 @@ async def main():
             scraper.tools.save_dict_in_mongo(id, tmp_dict)
             
 		# Read contacts from file
-        contacts = sender.load_interested_contacts(distance)
+        names, contacts = sender.load_interested_contacts(distance)
 
 		# Send email to each contact
-        subject, body = sender.email_builder(today, appointments_data, id)
 
-        for contact in contacts:
+        for fName, contact in zip(names, contacts):
+            subject, body = sender.email_builder(today, appointments_data, id, fName)
             sender.send_email(contact, subject=subject, body=body)
     except Exception as e:
         sender.report_error(e)

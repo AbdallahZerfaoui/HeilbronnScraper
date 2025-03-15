@@ -13,23 +13,31 @@ class EmailSender:
         self.smtp_server = STMP_SERVER
         self.smtp_port = STMP_PORT  # Port for TLS
     
-    def email_builder(self, today, appointments_data, id):
-        appointment_time = appointments_data[0]["start"]
-
+    def email_builder(self, today, appointments_data, id, fName):
+        appointment = appointments_data[0]["start"]
+        date, time = appointment.split('T')
         subject = SUBJECT
         with open(MESSAGE, "r", encoding="utf-8") as file:
-            print(appointment_time)
+            print(appointment)
             body = file.read()
-            body = body.replace("[appointment_time]", appointment_time)
+            # body = body.replace("[appointment_time]", appointment_time)
+            body = body.replace("[appointment_date]", date)
+            body = body.replace("[appointment_time]", time)
+            body = body.replace("[Booking_Link]", BOOKER_URL)
+            body = body.replace("[Location_Link]", LOCATION_LINK)
+            body = body.replace("[Office_Address]", OFFICE_ADDRESS)
+            body = body.replace("[Office_Name]", OFFICE_NAME)
+            body = body.replace("[First Name]", fName)
         return subject, body
     
     def load_interested_contacts(self, distance):
         df = pd.read_csv(CONTACTS_FILE)
         df = df[df['max_distance'] >= distance]
         contacts = df['email'].tolist()
-        return contacts
+        names = df['first_name'].tolist()
+        return names, contacts
 
-    def send_email(self, recipient_email, subject, body, is_html=False):
+    def send_email(self, recipient_email, subject, body, is_html=True):
         """
         Send an email to the specified recipient.
 
